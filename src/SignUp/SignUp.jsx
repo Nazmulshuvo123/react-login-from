@@ -6,6 +6,7 @@ import { useState } from "react";
 const SignUp = () => {
 
     const [errorMassage, setErrorMassage] = useState('');
+    const [success, setSuccess] = useState(false);
  const handleSignUp = (event) =>{
     event.preventDefault();
     const email  = event.target.email.value;
@@ -14,15 +15,24 @@ const SignUp = () => {
 
     //reset error and status
     setErrorMassage( ' ' );
+    setSuccess( false );
+
+    if(password.length < 6){
+        setErrorMassage("Password should be six character")
+        return;
+    }
 
     //create user with email and password
     createUserWithEmailAndPassword(auth, email, password)
      .then(result => {
         console.log(result.user)
+        setSuccess(true)
      })
      .catch(error => {
         console.log('Error', error.message);
-        setErrorMassage(error.message)
+        setErrorMassage(error.message);
+        setSuccess(false)
+        
       })
 }
 
@@ -67,6 +77,9 @@ const SignUp = () => {
       </form>
       {
         errorMassage && <p className="font-bold text-center text-sm text-red-500">{errorMassage}</p>
+      }
+      {
+        success && <p className="font-bold text-center text-sm text-green-500"> Sign Up Successful </p>
       }
     </div>
   );
