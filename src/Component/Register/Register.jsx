@@ -1,7 +1,23 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase.init";
+
+
 const Register = () => {
     const handleRegister = (event) =>{
-        event.preventDefault()
-        console.log(event.target.email.value)
+        event.preventDefault();
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+        console.log(email, password);
+
+        //Create user with email and password
+        createUserWithEmailAndPassword(auth, email, password)
+         .then((result) =>{
+           console.log(result.user)
+         })
+         .catch(error => {
+           console.log('Error', error);
+         })
+
     }
   return (
     <div className="max-w-md mx-auto">
@@ -34,7 +50,7 @@ const Register = () => {
               clipRule="evenodd"
             />
           </svg>
-          <input type="password" name="password" className="" value="password" />
+          <input type="password" name="password" className="" placeholder="password" />
         </label>
 
         <button className="btn btn-wide btn-accent my-4">Login</button>
