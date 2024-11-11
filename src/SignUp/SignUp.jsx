@@ -2,11 +2,13 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase.init";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [errorMassage, setErrorMassage] = useState("");
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
 
   const handleSignUp = (event) => {
     event.preventDefault();
@@ -105,6 +107,8 @@ const SignUp = () => {
           Sign Up Successful{" "}
         </p>
       )}
+      <p>Already Have an account? please <Link to='/login'><button className="btn bg-teal-500">Login</button>
+      </Link> </p>
     </div>
   );
 };
