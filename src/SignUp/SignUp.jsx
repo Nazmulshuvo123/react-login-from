@@ -1,41 +1,45 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase.init";
 import { useState } from "react";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUp = () => {
+  const [errorMassage, setErrorMassage] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-    const [errorMassage, setErrorMassage] = useState('');
-    const [success, setSuccess] = useState(false);
- const handleSignUp = (event) =>{
+  const handleSignUp = (event) => {
     event.preventDefault();
-    const email  = event.target.email.value;
+    const email = event.target.email.value;
     const password = event.target.password.value;
-    console.log(email, password);
+    const terms = event.target.terms.checked;
+    console.log(email, password, terms);
 
     //reset error and status
-    setErrorMassage( ' ' );
-    setSuccess( false );
+    setErrorMassage(" ");
+    setSuccess(false);
 
-    if(password.length < 6){
-        setErrorMassage("Password should be six character")
-        return;
+    if(!terms){
+      setErrorMassage('Please accept our terms and condition');
+      return;
+    }
+    if (password.length < 6) {
+      setErrorMassage("Password should be six character");
+      return;
     }
 
     //create user with email and password
     createUserWithEmailAndPassword(auth, email, password)
-     .then(result => {
-        console.log(result.user)
-        setSuccess(true)
-     })
-     .catch(error => {
-        console.log('Error', error.message);
-        setErrorMassage(error.message);
-        setSuccess(false)
-        
+      .then((result) => {
+        console.log(result.user);
+        setSuccess(true);
       })
-}
-
+      .catch((error) => {
+        console.log("Error", error.message);
+        setErrorMassage(error.message);
+        setSuccess(false);
+      });
+  };
 
   return (
     <div className="mx-auto card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
@@ -54,33 +58,53 @@ const SignUp = () => {
             required
           />
         </div>
-        <div className="form-control">
+        <div className="form-control relative">
           <label className="label">
             <span className="label-text">Password</span>
           </label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             placeholder="password"
             className="input input-bordered"
             required
           />
+          <button
+            onClick={() => setShowPassword(!showPassword)}
+            className="btn btn-xs absolute right-4 top-12"
+          >
+            {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
+          </button>
+
           <label className="label">
             <a href="#" className="label-text-alt link link-hover">
               Forgot password?
             </a>
           </label>
         </div>
+
+        <div className="form-control">
+          <label className="label cursor-pointer">
+            <input type="checkbox" name="terms"  className="checkbox" />
+            <span className="label-text font-semibold">Accept Our Terms And Condition</span>
+          </label>
+        </div>
+
         <div className="form-control mt-6">
           <button className="btn btn-primary">Login</button>
         </div>
       </form>
-      {
-        errorMassage && <p className="font-bold text-center text-sm text-red-500">{errorMassage}</p>
-      }
-      {
-        success && <p className="font-bold text-center text-sm text-green-500"> Sign Up Successful </p>
-      }
+      {errorMassage && (
+        <p className="font-bold text-center text-sm text-red-500">
+          {errorMassage}
+        </p>
+      )}
+      {success && (
+        <p className="font-bold text-center text-sm text-green-500">
+          {" "}
+          Sign Up Successful{" "}
+        </p>
+      )}
     </div>
   );
 };
