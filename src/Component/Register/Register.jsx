@@ -1,8 +1,10 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.init";
+import { useState } from "react";
 
 
 const Register = () => {
+    
     const handleRegister = (event) =>{
         event.preventDefault();
         const email = event.target.email.value;
@@ -55,8 +57,9 @@ const Register = () => {
 
         <button className="btn btn-wide btn-accent my-4">Login</button>
       </form>
+     
     </div>
   );
 };
-
+ 
 export default Register;
